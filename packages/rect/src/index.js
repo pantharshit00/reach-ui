@@ -1,4 +1,4 @@
-import React, { useRef, useState, useLayoutEffect } from "react";
+import React, { useRef, useState, useLayoutEffect, useEffect } from "react";
 import Component from "@reach/component-component";
 import observeRect from "@reach/observe-rect";
 import { func, bool } from "prop-types";
@@ -62,7 +62,8 @@ Rect.defaultProps = {
 export function useRect(nodeRef, observe = true) {
   let [rect, setRect] = useState(null);
   let observerRef = useRef(null);
-  useLayoutEffect(() => {
+  let useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect
+  useIsomorphicLayoutEffect(() => {
     if (!observerRef.current) {
       observerRef.current = observeRect(nodeRef.current, setRect);
     }
